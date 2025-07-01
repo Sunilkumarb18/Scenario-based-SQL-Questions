@@ -1,0 +1,20 @@
+CREATE TABLE #purchases (
+    user_id INT,
+    purchase_date DATE
+);
+
+INSERT INTO #purchases (user_id, purchase_date) VALUES
+(1, '2025-06-20'),
+(1, '2025-06-25'),
+(2, '2025-06-22'),
+(2, '2025-07-01'),
+(3, '2025-06-30'),
+(3, '2025-07-01'),
+(4, '2025-07-01');
+
+
+select user_id, 
+       min(purchase_date) first_login,
+	   DATEDIFF(DAY,  min(purchase_date), GETDATE()) no_of_days_since_first_login
+from #purchases
+group by user_id

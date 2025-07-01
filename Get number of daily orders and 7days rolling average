@@ -1,0 +1,35 @@
+
+
+create table #input
+(
+order_id int,
+customer_id int,
+order_date date
+)
+
+insert into #input values
+(1,101,'2024-01-01'),
+(2,102,'2024-01-01'),
+(3,103,'2024-01-02'),
+(4,104,'2024-01-03'),
+(5,105,'2024-01-04'),
+(6,106,'2024-01-04'),
+(7,107,'2024-01-05'),
+(8,108,'2024-01-05'),
+(9,109,'2024-01-06'),
+(10,110,'2024-01-07'),
+(11,111,'2024-01-08'),
+(12,112,'2024-01-08')
+
+
+
+with cte1 as
+(
+select order_date,
+count(order_id) daily_orders
+from #input
+group by order_date
+)
+select *, 
+       cast(avg(cast(daily_orders as decimal(18,2))) over(order by order_date rows between 6 preceding and current row) as decimal(18,2)) rolling_avg_7d 
+from cte1
